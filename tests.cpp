@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "json.h"
 
 
@@ -9,8 +10,6 @@ static void printObject(jsonValue j, int indent);
 static void printValue(jsonValue j, int indent)
 {
 	char str[100];
-	
-	//printf("value ptr='%s'\n", j.ptr);
 	
 	switch (j.type)
 	{
@@ -51,10 +50,9 @@ static void printValue(jsonValue j, int indent)
 static void printArray(jsonValue j, int indent)
 {
 	int i=0;
-	//printf("array ptr='%s'\n", j.ptr);
 	while (j.type == JSON_ARRAY)
 	{
-		printf("%*s[%d]\n", indent+2, "", i);
+		printf("%*s[%d]\n", indent+2, "", i++);
 		printValue(jsonObjectValue(j), indent+4);
 		
 		j=jsonNext(j);
@@ -65,7 +63,6 @@ static void printArray(jsonValue j, int indent)
 static void printObject(jsonValue j, int indent)
 {
 	char key[100];
-	//printf("object ptr='%s'\n", j.ptr);
 	while (j.type == JSON_OBJECT)
 	{
 		jsonObjectKey(j, key, sizeof(key));
@@ -101,14 +98,14 @@ int main()
 	}
 	int len=fread(json, 1, sizeof(json), f);
 	fclose(f);
+	json[len]=0;
 #else
 	strcpy(json, "{\"hello\": {\"wow\": 1, \"bau\": 2}, \"world\": [1,2,3]}");
-	int len=strlen(json);
 #endif
 	
 	
 	
-	jsonValue j=jsonParse(json, len);
+	jsonValue j=jsonParseString(json);
 	printf("result=%s\n", types[j.type]);
 	printObject(j, 0);
 	

@@ -14,23 +14,35 @@ enum
 };
 
 
+typedef char(*json_getc)(void*, int pos);
+
+
+typedef struct jsonPtr
+{
+	json_getc	cb;
+	void*		cb_param;
+	int			pos;
+} jsonPtr;
+
+
 typedef struct jsonValue
 {
-	int type;
-	const char *ptr;
+	char		type;
+	jsonPtr		ptr;
 } jsonValue;
 
 
-jsonValue jsonParse(const char *str, int len);
+jsonValue jsonParse(json_getc cb, void *param);
+jsonValue jsonParseString(const char *str);
 
-int jsonBoolean(jsonValue j);
-int jsonInteger(jsonValue j);
-double jsonDouble(jsonValue j);
-int jsonString(jsonValue j, char *value, int max);
-int jsonObjectKey(jsonValue j, char *value, int max);
-jsonValue jsonObjectValue(jsonValue j);
-jsonValue jsonObjectValueByKey(jsonValue j, const char *key);
-jsonValue jsonNext(jsonValue j);
+bool jsonBoolean(const jsonValue &j);
+int jsonInteger(const jsonValue &j);
+double jsonDouble(const jsonValue &j);
+int jsonString(const jsonValue &j, char *value, int max);
+int jsonObjectKey(const jsonValue &j, char *value, int max);
+jsonValue jsonObjectValue(const jsonValue &j);
+jsonValue jsonObjectValueByKey(const jsonValue &j, const char *key);
+jsonValue jsonNext(const jsonValue &j);
 
 
 #endif
