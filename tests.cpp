@@ -89,7 +89,7 @@ int main()
 	
 	char json[65536];
 	
-#if 1
+#if 0
 	FILE *f=fopen("test.json", "r");
 	if (! f)
 	{
@@ -100,7 +100,15 @@ int main()
 	fclose(f);
 	json[len]=0;
 #else
-	strcpy(json, "{\"hello\": {\"wow\": 1, \"bau\": 2}, \"world\": [1,2,3]}");
+	//strcpy(json, "{\"hello\": {\"wow\": 1, \"bau\": 2}, \"world\": [1,2,3]}");
+	//strcpy(json, "{\"hello\": {\"wow\": 1, \"bau\": 2}, \"world\": [1,2,3], \"zoo\":[null,{\"wow\":\"bau\"}]}");
+	//strcpy(json, "{\"zoo\":[null,{\"wow\":\"bau\"}]}");
+	strcpy(json, "{\"zoo\":[null,{\"wow\":\"bau\"}]}");
+	
+	printf("%s\n", json);
+/*
+{"zoo":[null,{"wow":"bau"}]}
+*/
 #endif
 	
 	

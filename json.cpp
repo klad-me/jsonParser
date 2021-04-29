@@ -2,7 +2,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include <limits.h>
 
 
 #define C(ptr)	((ptr)->cb((ptr)->cb_param, (ptr)->pos++))
@@ -580,10 +579,6 @@ jsonValue jsonNext(const jsonValue &j)
 		// Пропускаем текущее значение
 		if (! skip_value(&v.ptr)) goto fail;
 		if (! expect(&v.ptr, ',')) goto fail;
-		
-		// Проверим, что есть следующее значение
-		if (! guessType(&v)) goto fail;
-		v.type=JSON_ARRAY;
 		return v;
 	} else
 	if (v.type == JSON_OBJECT)
@@ -593,11 +588,6 @@ jsonValue jsonNext(const jsonValue &j)
 		if (! expect(&v.ptr, ':')) goto fail;
 		if (! skip_value(&v.ptr)) goto fail;
 		if (! expect(&v.ptr, ',')) goto fail;
-		
-		// Проверим, что есть следующее значение
-		guessType(&v);
-		if (v.type != JSON_STRING) goto fail;
-		v.type=JSON_OBJECT;
 		return v;
 	}
 	
